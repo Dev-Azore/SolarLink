@@ -1,1 +1,6 @@
-* @your-username
+# Global owner for the entire repo
+* @Dev-Azore
+
+# Specific track owners:
+/backend/     @Dev-Azore
+/infrastructure/ @Dev-Azore
