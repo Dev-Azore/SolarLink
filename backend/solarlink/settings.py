@@ -1,0 +1,112 @@
+"""
+Django settings for solarlink project.
+Optimized for DevOps: Environment-aware and Production-ready.
+"""
+
+import os
+from pathlib import Path
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# --- 1. SECURITY & ENVIRONMENT CONFIG ---
+
+# Pull from environment, or use a placeholder ONLY for local development
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-dev-only-azore-2026')
+
+# Convert string to Boolean safely
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+
+# Allow local hosts and production hosts from environment
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,0.0.0.0').split(',')
+
+
+# --- 2. APPLICATION DEFINITION ---
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    # Add your project apps here
+]
+
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+ROOT_URLCONF = 'solarlink.urls'
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+WSGI_APPLICATION = 'solarlink.wsgi.application'
+
+
+# --- 3. DATABASE CONFIG (PostgreSQL) ---
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST', 'db'),
+        'PORT': os.environ.get('DB_PORT', '5432'),
+    }
+}
+
+
+# --- 4. AUTHENTICATION & VALIDATION ---
+
+AUTH_PASSWORD_VALIDATORS = [
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
+]
+
+
+# --- 5. INTERNATIONALIZATION ---
+
+LANGUAGE_CODE = 'en-us'
+TIME_ZONE = 'UTC'
+USE_I18N = True
+USE_TZ = True
+
+
+# --- 6. STATIC & MEDIA FILES ---
+
+STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# Ensure Staticfiles works correctly in Docker
+STATICFILES_DIRS = []
+
+
+# --- 7. MISCELLANEOUS ---
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
